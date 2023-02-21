@@ -8,9 +8,10 @@ const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
   process.env.DATABASE_PASSWORD
 );
+
+mongoose.set('strictQuery', true);
 mongoose
-  .createConnection(DB)
-  .asPromise()
+  .connect(process.env.DATABASE_LOCAL)
   .then(() => console.log('DB connection successful!'));
 
 const tourSchema = new mongoose.Schema({
@@ -24,6 +25,22 @@ const tourSchema = new mongoose.Schema({
 });
 
 const Tour = mongoose.model('Tour', tourSchema);
+
+const testTour = new Tour({
+  name: 'The Forest Hiker',
+  rating: 4.7,
+  price: 497,
+});
+
+testTour
+  .save()
+  .then((doc) => {
+    console.log(doc);
+    mongoose.connection.close();
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
