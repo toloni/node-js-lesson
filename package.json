@@ -22,6 +22,7 @@
     "express": "^4.18.2",
     "mongoose": "^6.9.2",
     "morgan": "^1.10.0",
-    "prettier": "^2.8.4"
+    "prettier": "^2.8.4",
+    "slugify": "^1.6.5"
   }
 }

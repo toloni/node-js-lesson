@@ -109,9 +109,9 @@ exports.getTourStats = async (req, res) => {
       {
         $group: {
           _id: { $toUpper: '$difficulty' },
-          num: { $sum: 1 },
+          numTours: { $sum: 1 },
           numRatings: { $sum: '$ratingsQuantity' },
-          avgRatings: { $avg: '$ratingsAverage' },
+          avgRating: { $avg: '$ratingsAverage' },
           avgPrice: { $avg: '$price' },
           minPrice: { $min: '$price' },
           maxPrice: { $max: '$price' },
@@ -121,8 +121,8 @@ exports.getTourStats = async (req, res) => {
         $sort: { avgPrice: 1 },
       },
       // {
-      //   $match: { _id: { $ne: 'EASY' } },
-      // },
+      //   $match: { _id: { $ne: 'EASY' } }
+      // }
     ]);
 
     res.status(200).json({
@@ -156,7 +156,7 @@ exports.getMonthlyPlan = async (req, res) => {
       {
         $group: {
           _id: { $month: '$startDates' },
-          numTourStats: { $sum: 1 },
+          numTourStarts: { $sum: 1 },
           tours: { $push: '$name' },
         },
       },
@@ -164,10 +164,12 @@ exports.getMonthlyPlan = async (req, res) => {
         $addFields: { month: '$_id' },
       },
       {
-        $project: { _id: 0 },
+        $project: {
+          _id: 0,
+        },
       },
       {
-        $sort: { numTourStats: -1 },
+        $sort: { numTourStarts: -1 },
       },
       {
         $limit: 12,
